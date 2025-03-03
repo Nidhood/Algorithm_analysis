@@ -18,10 +18,12 @@ def calculate_avg_std_DYV_aux(numbers, b, e):
     # Caso base (no hay elementos):
     if b > e:
         return 0.0, 0.0
+    # end if
 
     # Caso base (hay un elemento):
     if b == e:
         return numbers[b], 0.0
+    # end if
 
     # Caso base (hay dos elementos):
     if e - b == 1:
@@ -47,4 +49,4 @@ def calculate_avg_std_DYV_aux(numbers, b, e):
         # Desviación estándar global:
         std = sqrt((n1 * pow(s1, 2) + n2 * pow(s2, 2)) / (n1 + n2) + pow(avg1 - avg2, 2) * n1 * n2 / (pow( (n1 + n2), 2)))
         return avg, std
-    # end if
+    # end else
