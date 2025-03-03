@@ -11,7 +11,8 @@
 from math import sqrt
 
 def calculate_avg_std_DYV(numbers):
-    return calculate_avg_std_DYV_aux(numbers, 0, len(numbers)-1)
+    avg, std = calculate_avg_std_DYV_aux(numbers, 0, len(numbers) - 1)
+    return round(avg, 9), round(std, 9)
 
 def calculate_avg_std_DYV_aux(numbers, b, e):
 
