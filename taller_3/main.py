@@ -1,28 +1,7 @@
 import sys
 import time
-
-def calculate_avg_std_iter(numbers):
-    """
-    Calcula el promedio y la desviación estándar de una lista de números
-    El promedio se calcula como la suma de los números dividido por la cantidad de números
-    La desviación estándar se calcula como la raíz cuadrada de la suma de la diferencia de cada número
-        con el promedio al cuadrado dividido por la cantidad de números
-    """
-    # TODO: implementar la función, ** sirve en python para elevar a una potencia
-
-
-def calculate_avg_std_DYV(numbers):
-    # Recuerde que en pseudocódigo los indices irian de 1 a |numbers|
-    return calculate_avg_std_DYV_aux(numbers, 0, len(numbers)-1)
-
-def calculate_avg_std_DYV_aux(numbers, b, e):
-    # TODO: implementar la función
-    # Si se tiene una desviacion s1 sobre un conjunto de n1 elementos y una desviacion s2 sobre un conjunto de n2 elementos
-    # avg1 el promedio del primer conjunto y avg2 el del segundo, la desviacion sobre el conjunto de n1+n2 elementos es:
-    #       (n1*s1^2 + n2*s2^2) / (n1 + n2) + (avg1 - avg2)^2 *(n1*n2)/ (n1 + n2)
-
-    pass
-
+from taller_3.iterative_solution import calculate_avg_std_iter
+from taller_3.recursive_solution import calculate_avg_std_DYV
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
