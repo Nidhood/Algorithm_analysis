@@ -9,7 +9,8 @@ def calculate_avg_std_iter(numbers):
         return 0, 0
 
     # Calculamos el promedio
-    average = sum(numbers) / n
+    sum_numbers = sum(numbers)
+    average = sum_numbers / n
 
     # Calculamos la suma de las diferencias al cuadrado
     sum_squared_diferrences = 0
@@ -21,4 +22,4 @@ def calculate_avg_std_iter(numbers):
     standard_deviation = math.sqrt((sum_squared_diferrences / n))
 
     # Retornamos el promedio y la desviación estándar
-    return round(average, 9), round(standard_deviation, 9)
+    return average, standard_deviation

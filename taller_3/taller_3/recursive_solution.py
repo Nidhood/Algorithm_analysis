@@ -12,7 +12,7 @@ from math import sqrt
 
 def calculate_avg_std_DYV(numbers):
     avg, std = calculate_avg_std_DYV_aux(numbers, 0, len(numbers) - 1)
-    return round(avg, 9), round(std, 9)
+    return avg, std
 
 def calculate_avg_std_DYV_aux(numbers, b, e):
 
@@ -48,6 +48,6 @@ def calculate_avg_std_DYV_aux(numbers, b, e):
         avg = (n1 * avg1 + n2 * avg2) / (n1 + n2)
 
         # Desviación estándar global:
-        std = sqrt((n1 * pow(s1, 2) + n2 * pow(s2, 2)) / (n1 + n2) + pow(avg1 - avg2, 2) * n1 * n2 / (pow( (n1 + n2), 2)))
+        std = sqrt((n1 * pow(s1, 2) + n2 * pow(s2, 2)) / (n1 + n2) + pow(avg1 - avg2, 2) * n1 * n2 / (pow( (n1 + n2 ), 2)))
         return avg, std
     # end else

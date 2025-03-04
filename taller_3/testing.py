@@ -26,12 +26,11 @@ class MyTestCase(unittest.TestCase):
     def test_rand(self):
         place_sequence = [random.randint(1, 20) for i in range(0, 100)]
         avg_ok = statistics.mean(place_sequence)
-        std_ok = statistics.stdev(place_sequence)
+        std_ok = statistics.pstdev(place_sequence)
         avg, std = calculate_avg_std_iter(place_sequence)
         avg_dyv, std_dyv = calculate_avg_std_DYV(place_sequence)
         self.assertEqual(avg, avg_ok)
         assert math.isclose(std, std_ok)
-
         self.assertEqual(avg_dyv, avg_ok)
         assert math.isclose(std_dyv, std_ok)
 
