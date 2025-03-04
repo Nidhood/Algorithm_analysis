@@ -1,10 +1,24 @@
+import math
 
 def calculate_avg_std_iter(numbers):
-    """
-    Calcula el promedio y la desviación estándar de una lista de números
-    El promedio se calcula como la suma de los números dividido por la cantidad de números
-    La desviación estándar se calcula como la raíz cuadrada de la suma de la diferencia de cada número
-        con el promedio al cuadrado dividido por la cantidad de números
-    """
-    # TODO: implementar la función, ** sirve en python para elevar a una potencia
+    # Obtenemos la cantidad de números de la lista
+    n = len(numbers)
 
+    # Si la lista está vacía, retornamos 0 para ambos valores
+    if n == 0:
+        return 0, 0
+
+    # Calculamos el promedio
+    average = sum(numbers) / n
+
+    # Calculamos la suma de las diferencias al cuadrado
+    sum_squared_diferrences = 0
+    for number in numbers:
+        diferrence = number - average
+        sum_squared_diferrences += diferrence ** 2
+
+    # Calculamos la desviación estándar
+    standard_deviation = math.sqrt((sum_squared_diferrences / n))
+
+    # Retornamos el promedio y la desviación estándar
+    return round(average, 9), round(standard_deviation, 9)
