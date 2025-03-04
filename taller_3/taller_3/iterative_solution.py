@@ -1,3 +1,12 @@
+"""
+#-------------------------------------------------------------------------
+# calculate_avg_std_DYV : Implementa un algoritmo iterativo para calcular el promedio y la desviación estándar de una lista de números.
+# @inputs               : Una lista de números, por ejemplo: [1, 2, 3, 4, 5].
+# @outputs              : Una tupla (promedio, desviación_estándar) calculados sobre la lista.
+# @autor                : Miguel Ángel Márquez Posso
+#-------------------------------------------------------------------------
+"""
+
 import math
 
 def calculate_avg_std_iter(numbers):
