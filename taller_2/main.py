@@ -50,3 +50,5 @@ if __name__ == "__main__":
     output_file = sys.argv[4]
 
     ejecutar_experimentos(min_n, max_n, step_n, output_file)
+
+
