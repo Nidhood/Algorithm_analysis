@@ -7,7 +7,6 @@
 #-------------------------------------------------------------------------
 """
 
-
 def get_data(input_file):
     with open(input_file, 'r') as file:
         data = []
