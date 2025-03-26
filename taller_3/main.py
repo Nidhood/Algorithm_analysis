@@ -15,7 +15,7 @@ if __name__ == '__main__':
         numbers = list(map(int, f.readline().split()))
         print(numbers)
 
-        # start time useing perf_counter
+        # start time using perf_counter
         start = time.perf_counter()
         avg, std = calculate_avg_std_iter(numbers)
         end = time.perf_counter()
