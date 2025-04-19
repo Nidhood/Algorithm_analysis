@@ -1,6 +1,6 @@
 import unittest
 
-from taller_2.iterative_solution import calculo_areas_absolutas, calculo_intersecciones, solucion_iterativa
+from taller_1.iterative_solution import calculo_areas_absolutas, calculo_intersecciones, solucion_iterativa
 
 
 def area_manual(S):

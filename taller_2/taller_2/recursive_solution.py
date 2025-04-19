@@ -1,56 +1,53 @@
 """
 #-------------------------------------------------------------------------
-# recursive_solution: Recursivamente encuentra el area y las intersecciones de un conjunto de rectangulos, para luego calcular el area total.
-# @inputs           : Un conjunto de m rectángulos representado como una secuencia S = ⟨S1, S2, . . . , Sm⟩.
-# @outputs          : Un valor entero A ∈ N, donde A = A1 ∪ A2 ∪ A3 ∪ · · · ∪ An y A > 0.
-# @author           : Miguel Ángel Márquez Posso
+# calculate_avg_std_DYV : Implementa un algoritmo divide y vencerás para calcular el promedio y la desviación estándar de una lista de números.
+# @inputs               : Una lista de números, por ejemplo: [1, 2, 3, 4, 5].
+# @outputs              : Una tupla (promedio, desviación_estándar) calculados sobre la lista.
+# @autor                : Ivan Dario Orozco Ibanez
 #-------------------------------------------------------------------------
 """
 
-def calcular_interseccion(r1, r2):
-    """Calcula el área de intersección entre dos rectángulos."""
-    x_izq = max(r1[0][0], r2[0][0])
-    x_der = min(r1[1][0], r2[1][0])
-    y_arr = min(r1[0][1], r2[0][1])
-    y_aba = max(r1[1][1], r2[1][1])
 
-    if x_izq < x_der and y_aba < y_arr:
-        return (x_der - x_izq) * (y_arr - y_aba)
-    return 0
+from math import sqrt
 
+def calculate_avg_std_DYV(numbers):
+    avg, std = calculate_avg_std_DYV_aux(numbers, 0, len(numbers) - 1)
+    return avg, std
 
-def calcular_intersecciones(S_izq, S_der):
-    """Divide y conquista para calcular las intersecciones entre dos subconjuntos de rectángulos."""
-    if not S_izq or not S_der:
-        return 0
-    if len(S_izq) == 1 and len(S_der) == 1:
-        return calcular_interseccion(S_izq[0], S_der[0])
+def calculate_avg_std_DYV_aux(numbers, b, e):
 
-    m1 = len(S_izq) // 2
-    m2 = len(S_der) // 2
+    # Caso base (no hay elementos):
+    if b > e:
+        return 0.0, 0.0
+    # end if
 
-    A1 = calcular_intersecciones(S_izq[:m1], S_der[:m2])
-    A2 = calcular_intersecciones(S_izq[:m1], S_der[m2:])
-    A3 = calcular_intersecciones(S_izq[m1:], S_der[:m2])
-    A4 = calcular_intersecciones(S_izq[m1:], S_der[m2:])
+    # Caso base (hay un elemento):
+    if b == e:
+        return numbers[b], 0.0
+    # end if
 
-    return A1 + A2 + A3 + A4
+    # Caso base (hay dos elementos):
+    if e - b == 1:
+        avg_partial = (numbers[b] + numbers[e]) / 2
+        std_partial = sqrt((pow(numbers[b] - avg_partial, 2) + pow(numbers[e] - avg_partial, 2)) / 2)
+        return avg_partial, std_partial
 
+    # Caso recursivo:
+    else:
+        q = (b + e) // 2
+        avg1, s1 = calculate_avg_std_DYV_aux(numbers, b, q)
+        avg2, s2 = calculate_avg_std_DYV_aux(numbers, q + 1, e)
 
-def solucion_divide_vence(S):
-    """Resuelve el problema usando la estrategia de dividir y vencer."""
-    if not S:
-        return 0
-    if len(S) == 1:
-        (x_u, y_u), (x_d, y_d) = S[0]
-        return (x_d - x_u) * (y_u - y_d)
+        # Numero de elementos en la parte izquierda
+        n1 = q - b + 1
 
-    m = len(S) // 2
-    S_izq = S[:m]
-    S_der = S[m:]
+        # Numero de elementos en la parte derecha
+        n2 = e - q
 
-    A_izq = solucion_divide_vence(S_izq)
-    A_der = solucion_divide_vence(S_der)
-    A_inter = calcular_intersecciones(S_izq, S_der)
+        # Promedio global:
+        avg = (n1 * avg1 + n2 * avg2) / (n1 + n2)
 
-    return A_izq + A_der - A_inter
+        # Desviación estándar global:
+        std = sqrt((n1 * pow(s1, 2) + n2 * pow(s2, 2)) / (n1 + n2) + pow(avg1 - avg2, 2) * n1 * n2 / (pow( (n1 + n2 ), 2)))
+        return avg, std
+    # end else

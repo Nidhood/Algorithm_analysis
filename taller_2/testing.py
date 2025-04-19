@@ -1,7 +1,7 @@
 import unittest
 import math, statistics, random
-from taller_3.iterative_solution import calculate_avg_std_iter
-from taller_3.recursive_solution import calculate_avg_std_DYV
+from taller_2.iterative_solution import calculate_avg_std_iter
+from taller_2.recursive_solution import calculate_avg_std_DYV
 
 class MyTestCase(unittest.TestCase):
     def test_constant(self):

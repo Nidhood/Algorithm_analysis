@@ -1,77 +1,34 @@
 """
 #-------------------------------------------------------------------------
-# iterative_solution: Iterativamente encuentra el area y las intersecciones de un conjunto de rectangulos, para luego calcular el area total.
-# @inputs           : Un conjunto de m rectángulos representado como una secuencia S = ⟨S1, S2, . . . , Sm⟩.
-# @outputs          : Un valor entero A ∈ N, donde A = A1 ∪ A2 ∪ A3 ∪ · · · ∪ An y A > 0.
-# @author           : Ivan Dario Orozco Ibanez
+# calculate_avg_std_iter : Implementa un algoritmo iterativo para calcular el promedio y la desviación estándar de una lista de números.
+# @inputs               : Una lista de números, por ejemplo: [1, 2, 3, 4, 5].
+# @outputs              : Una tupla (promedio, desviación_estándar) calculados sobre la lista.
+# @autor                : Miguel Ángel Márquez Posso
 #-------------------------------------------------------------------------
 """
 
-def calculo_areas_absolutas(S):
-    n = len(S)
-    A = []
+import math
 
-    # Iteramos sobre los rectangulos:
-    for i in range(n):
+def calculate_avg_std_iter(numbers):
+    # Obtenemos la cantidad de números de la lista
+    n = len(numbers)
 
-        # Obtenemos el largo del rectangulo i:
-        ancho = S[i][1][0] - S[i][0][0]
+    # Si la lista está vacía, retornamos 0 para ambos valores
+    if n == 0:
+        return 0, 0
 
-        # Obtenemos el ancho del rectangulo i:
-        largo = S[i][0][1] - S[i][1][1]
+    # Calculamos el promedio
+    sum_numbers = sum(numbers)
+    average = sum_numbers / n
 
-        # Calculamos el area del rectangulo i:
-        area = ancho * largo
-        A.append(area)
-    # end for
-    return A
+    # Calculamos la suma de las diferencias al cuadrado
+    sum_squared_diferrences = 0
+    for number in numbers:
+        diferrence = number - average
+        sum_squared_diferrences += diferrence ** 2
 
+    # Calculamos la desviación estándar
+    standard_deviation = math.sqrt((sum_squared_diferrences / n))
 
-def calculo_intersecciones(S):
-    n = len(S)
-    I = []
-
-    # Iteramos sobre los rectangulos:
-    for i in range(n):
-
-        # Definimos el espacio del rectangulo i:
-        x_u_i, y_u_i = S[i][0]
-        x_d_i, y_d_i = S[i][1]
-
-        # Comparamos con los otros rectangulos:
-        for j in range(i + 1, n):
-
-            # Definimos el espacio del rectángulo j:
-            x_u_j, y_u_j = S[j][0]
-            x_d_j, y_d_j = S[j][1]
-
-            # Conseguimos las coordenadas del rectangulo interseccion:
-            x_izq = max(x_u_i, x_u_j)
-            x_der = min(x_d_i, x_d_j)
-            y_arr = min(y_u_i, y_u_j)
-            y_aba = max(y_d_i, y_d_j)
-
-            if x_izq < x_der and y_aba < y_arr:
-
-                # Obtenemos el largo del rectangulo interseccion:
-                largo = x_der - x_izq
-
-                # Obtenemos el ancho del rectangulo interseccion:
-                ancho = y_arr - y_aba
-
-                # Calculamos el area del rectangulo interseccion:
-                area = largo * ancho
-                I.append(area)
-            # end if
-        # end for
-    # end for
-    return I
-
-def area_total(A, I):
-    return sum(A) - sum(I)
-
-
-def solucion_iterativa(S):
-    A = calculo_areas_absolutas(S)
-    I = calculo_intersecciones(S)
-    return area_total(A, I)
+    # Retornamos el promedio y la desviación estándar
+    return average, standard_deviation
