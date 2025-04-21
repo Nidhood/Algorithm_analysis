@@ -128,8 +128,12 @@ if __name__ == "__main__":
     len_td, M_td = top_down(P)
     seq_td = memory_analysis(P, M_td)
     print(f"Top‑Down: {len_td}, Subsecuencia: {seq_td}")
+    for i in range (len(M_td)):
+        print(M_td[i])
 
     # Bottom‑Up
     len_bu, M_bu = bottom_up(P)
     seq_bu = memory_analysis(P, M_bu)
     print(f"Bottom‑Up: {len_bu}, Subsecuencia: {seq_bu}")
+    for i in range (len(M_bu)):
+        print(M_bu[i])
