@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import random
-import collections
 
 class Graph:
     COLOR_CODES = [31, 32, 33, 34, 35, 36,
@@ -63,14 +62,12 @@ class Graph:
             self.initial_positions[v] = (pts[0], pts[1])
 
     def get_neighbors(self, i, j):
-        """Vecinos 4‑direccionales dentro de límites."""
         for di, dj in [(-1,0),(1,0),(0,-1),(0,1)]:
             ni, nj = i + di, j + dj
             if 0 <= ni < self.n and 0 <= nj < self.m:
                 yield (ni, nj)
 
     def is_full(self):
-        """¿No queda ni un solo 0 en la matriz?"""
         return all(
             self.matrix[i][j] != 0
             for i in range(self.n) for j in range(self.m)
