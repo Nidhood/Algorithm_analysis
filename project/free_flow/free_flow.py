@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 from project.free_flow.board.read_board import read_board
+from project.free_flow.game.start import start
 from project.free_flow.graph.graph import Graph
 #-------------------------------------------------------------------------
 # free_flow :   Juego que consiste en conectar numeros en parejas de dos, ubicados 
@@ -32,8 +33,8 @@ def free_flow(board_file):
 
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     # 3. Crear un grafo a partir del tablero de nxn celdas.
-    board = Graph(input_board)
+    graph = Graph(input_board)
 
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     # 4. Iniciar juego:
-    board.start()
+    start(graph)
