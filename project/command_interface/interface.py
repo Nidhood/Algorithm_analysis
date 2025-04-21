@@ -40,11 +40,19 @@ class Interface:
     def print_specific_help(self, words, word_count):
         if word_count == 3 and words[1] == "cargar" and words[2] == "nombre_archivo":
             print("Modo de uso: 'cargar' nombre_archivo")
+            print("Descripción:")
+            print("Carga un tablero desde el archivo nombre_archivo. El archivo debe estar en formato texto,")
+            print("donde la primera línea indica el tamaño (n,m), y las siguientes contienen las coordenadas")
+            print("y el valor de los puntos de inicio y fin para cada número.")
         elif word_count == 2 and words[1] == "jugar":
             print("Modo de uso: 'jugar'")
+            print("Descripción:")
+            print("Inicia el modo de juego en consola. Podrás dibujar caminos entre los puntos")
+            print("de igual valor, borrar caminos completos o borrar pasos individuales.")
+            print("Usa el menú interactivo para seleccionar las acciones dentro del juego.")
         elif word_count == 2 and words[1] == "salir":
             print("Modo de uso: 'salir'")
-            print("Termina la ejecución de la aplicación")
+            print("Finaliza la ejecución del programa y cierra la aplicación.")
         else:
             print("Comando no reconocido. Intente nuevamente.")
 
