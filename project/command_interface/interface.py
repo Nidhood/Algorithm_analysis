@@ -6,6 +6,7 @@ from free_flow.free_flow import free_flow
 from utils.clear_screen import clear_screen
 from free_flow.graph.graph import Graph
 from autonomous_solutions.heuristic_solution import heuristic_solution
+from autonomous_solutions.brute_solution import brute_solution
 
 
 class Interface:
@@ -99,8 +100,12 @@ class Interface:
 
                 modo = words[1]
                 if modo == "bruta":
-                    print("Solución bruta aún no implementada.")
-                    return
+                    clear_screen()
+                    matrix = read_board(self.input_board)
+                    graph = Graph(matrix)
+                    success = brute_solution(graph)
+                    if not success:
+                        print("No se encontró solución conectando todos los pares.")
 
                 elif modo == "heuristica":
                     clear_screen()
