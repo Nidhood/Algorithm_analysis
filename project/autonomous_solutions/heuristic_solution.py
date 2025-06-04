@@ -2,119 +2,104 @@
 # -*- coding: utf-8 -*-
 import sys
 import time
-import math
 import random
-import itertools
+import heapq
 from copy import deepcopy
 from free_flow.graph.graph import Graph
 from free_flow.board.print_board import print_board
 from utils.clear_screen import clear_screen
-
 #-------------------------------------------------------------------------
-# heuristic_solution:   Intenta conectar todos los pares usando un backtracking
-#                      y probando varias permutaciones de orden de colores.
-#                      Imprime el tablero tras cada conexion de color, y al
-#                      final muestra el numero de iteraciones y el tiempo.
-# @inputs   :   graph: instancia de Graph inicializada con matrix e initial_positions.
-# @outputs  :   True si encuentra solucion para al menos un orden; False en otro caso.
-# @author   :   Miguel & Ivan Dario Orozco Ibanez
+# heuristic_solution :  Solucion heuristica para el juego Free Flow, basada en A* con poda.
+# @inputs   :   Un grafo, objeto que representa el grafo del tablero del juego.
+# @outputs  :   Valor booleano que indica si se encontro una solucion.
+# @author   :   Ivan Dario Orozco Ibanez
 #-------------------------------------------------------------------------
 def heuristic_solution(graph: Graph):
-    sys.setrecursionlimit(10000)
-    colores = list(graph.initial_positions.keys())
-    k = len(colores)
+    start_time = time.time() * 1000  # Tiempo en milisegundos
 
-    # Calcular cuantos ordenes probar:
-    # Si k! <= 720, probar todas las permutaciones; si k! > 720, probar 720 ordenes aleatorios.
-    total_perm = math.factorial(k)
-    if total_perm <= 720:
-        orders = list(itertools.permutations(colores))
-    else:
-        orders = set()
-        while len(orders) < 720:
-            perm = tuple(random.sample(colores, k))
-            orders.add(perm)
-        orders = list(orders)
+    # Ordenar colores por distancia Manhattan entre sus puntos
+    colors = sorted(graph.initial_positions.keys(),
+                    key=lambda c: manhattan_distance(graph.initial_positions[c][0], graph.initial_positions[c][1]))
 
-    start_time = time.time()
-    iter_count = 0
+    # Intentar conectar los colores en orden
+    for i, color in enumerate(colors):
+        start, end = graph.initial_positions[color]
+        if not connect_color(graph, color, start, end, i + 1, len(colors)):
+            current_time = time.time() * 1000
+            print(f"\nNo se pudo conectar el color {color}!")
+            print(f"Tiempo transcurrido: {current_time - start_time:.2f} ms")
+            return False
 
-    # Probar cada orden hasta encontrar solucion
-    for order in orders:
-        iter_count += 1
-        result = try_order(graph, order)
-        if result is not None:
-            # Copiar resultado al graph original
-            graph.matrix = result.matrix
-            graph.paths = result.paths
-            graph.connected_paths = result.connected_paths
-            graph.finished = True
+    # Exito: todos los colores conectados
+    graph.finished = True
+    clear_screen()
+    current_time = time.time() * 1000
+    print("¡SOLUCIÓN ENCONTRADA!")
+    print(f"Tiempo total: {current_time - start_time:.2f} ms")
+    print(f"Colores conectados: {len(colors)}")
+    print_board(graph)
+    return True
+
+# Calcula la distancia Manhattan entre dos puntos
+def manhattan_distance(p1, p2):
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+
+
+# Conecta dos puntos de un color en el grafo usando A* para encontrar el camino mas corto
+def connect_color(graph, color, start, end, current, total):
+    open_set = []
+    heapq.heappush(open_set, (0, start, [start]))
+    came_from = {}
+    g_score = {start: 0}
+    f_score = {start: manhattan_distance(start, end)}
+
+    while open_set:
+        _, current_pos, path = heapq.heappop(open_set)
+
+        if current_pos == end:
+            # Encontramos un camino, aplicarlo
+            apply_path(graph, color, path)
             clear_screen()
-            elapsed = time.time() - start_time
-            print(f"Solucion encontrada con orden: {order}")
+            print(f"Conectando color {color} ({current}/{total})...")
+            print(f"Longitud del camino: {len(path)} celdas")
             print_board(graph)
-            print(f"Iteraciones: {iter_count}")
-            print(f"Tiempo: {elapsed:.2f} segundos")
             return True
 
-    elapsed = time.time() - start_time
-    print(f"Ninguna permutacion encontro solucion en {iter_count} iteraciones y {elapsed:.2f} segundos.")
+        for neighbor in get_neighbors(graph, current_pos):
+            # Verificar si podemos pasar por esta celda
+            current_value = graph.matrix[neighbor[0]][neighbor[1]]
+            if current_value != 0 and neighbor != end and neighbor != start:
+                continue
+
+            # Calcular nuevo costo
+            tentative_g_score = g_score[current_pos] + 1
+
+            if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
+                came_from[neighbor] = current_pos
+                g_score[neighbor] = tentative_g_score
+                f = tentative_g_score + manhattan_distance(neighbor, end)
+                new_path = path + [neighbor]
+                heapq.heappush(open_set, (f, neighbor, new_path))
+
     return False
 
-# Busca recursivamente un camino desde 'cur' hasta el endpoint p2
-# en 'g_local', marcando celdas libres o el endpoint. Si llega a p2,
-# registra el camino en g_local.paths[color], anade color a
-# g_local.connected_paths y pinta el camino en g_local.matrix.
-# Imprime el tablero con print_board tras completar el camino.
-def dfs_path(color, path, g_local):
-    cur = path[-1]
-    p2 = g_local.initial_positions[color][1]
-    if cur == p2:
-        # Ruta completa para este color
-        g_local.paths[color] = deepcopy(path)
-        g_local.connected_paths.add(color)
-        for (i, j) in path:
-            g_local.matrix[i][j] = color
-        # Imprimir avance
-        clear_screen()
-        print(f"Conectando color {color}:")
-        print_board(g_local)
-        time.sleep(0.3)
-        return True
+# Obtiene los vecinos válidos de una celda en el grafo
+def get_neighbors(graph, cell):
+    i, j = cell
+    neighbors = []
+    for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+        ni, nj = i + dx, j + dy
+        if 0 <= ni < graph.n and 0 <= nj < graph.m:
+            neighbors.append((ni, nj))
+    return neighbors
 
-    x, y = cur
-    for dx, dy in [(-1,0),(1,0),(0,-1),(0,1)]:
-        nx, ny = x + dx, y + dy
-        if 0 <= nx < g_local.n and 0 <= ny < g_local.m:
-            if (nx, ny) not in path and (g_local.matrix[nx][ny] == 0 or (nx, ny) == p2):
-                path.append((nx, ny))
-                prev = g_local.matrix[nx][ny]
-                g_local.matrix[nx][ny] = color
-                if dfs_path(color, path, g_local):
-                    return True
-                g_local.matrix[nx][ny] = prev
-                path.pop()
-    return False
+# Aplicar el camino encontrado al grafo
+def apply_path(graph, color, path):
+    # Aplicar el camino al grafo
+    for cell in path[1:-1]:  # No sobrescribir los puntos de inicio/fin
+        i, j = cell
+        graph.matrix[i][j] = color
 
-# Dados 'graph' original y una permutacion 'order' de colores,
-# crea una copia profunda, marca endpoints en matrix, y para cada
-# color en 'order' invoca dfs_path. Si todos se conectan, retorna
-# la copia modificada; si falla algun color, retorna None.
-def try_order(graph, order):
-    gcopy = deepcopy(graph)
-    gcopy.paths = {v: [gcopy.initial_positions[v][0], gcopy.initial_positions[v][1]] for v in order}
-    gcopy.connected_paths.clear()
-    # Asegurar endpoints marcados en matrix
-    for v in order:
-        p1, p2 = gcopy.initial_positions[v]
-        gcopy.matrix[p1[0]][p1[1]] = v
-        gcopy.matrix[p2[0]][p2[1]] = v
-
-    # Conectar colores en el orden dado
-    for color in order:
-        p1, _ = gcopy.initial_positions[color]
-        path = [p1]
-        gcopy.matrix[p1[0]][p1[1]] = color
-        if not dfs_path(color, path, gcopy):
-            return None  # falla este orden
-    return gcopy  # exito: todos conectados
+    # Actualizar el camino para este color
+    graph.paths[color] = path
+    graph.connected_paths.add(color)
