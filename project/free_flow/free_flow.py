@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-from project.free_flow.board.read_board import read_board
-from project.free_flow.game.start import start
-from project.free_flow.graph.graph import Graph
+from free_flow.board.read_board import read_board
+from free_flow.game.start import start
+from free_flow.graph.graph import Graph
 #-------------------------------------------------------------------------
 # free_flow :   Juego que consiste en conectar numeros en parejas de dos, ubicados 
 #               en un tablero de nxn celdas. La unica restriccion es que se deben 
@@ -38,3 +38,7 @@ def free_flow(board_file):
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     # 4. Iniciar juego:
     start(graph)
+
+    # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    # 5. Retornar si el jugador/maquina logro conectar todos los numeros sin cruzar lineas entre si.
+    return graph.finished

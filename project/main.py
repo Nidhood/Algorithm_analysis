@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import sys
-from free_flow.free_flow import free_flow
-from project.command_interface.interface import Interface
+from command_interface.interface import Interface
 
 
 def main():

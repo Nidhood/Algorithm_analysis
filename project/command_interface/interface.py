@@ -1,12 +1,15 @@
-from project.free_flow.board.read_board import read_board
-from project.free_flow.free_flow import free_flow
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+from free_flow.board.read_board import read_board
+from free_flow.free_flow import free_flow
+from utils.clear_screen import clear_screen
 
 
 class Interface:
     def __init__(self):
         self.command = ""
         self.input_board = None
-        self.graph = None  # Placeholder for a possible 'Graph' object
+        self.graph = None
 
     def get_command(self):
         return self.command
@@ -22,8 +25,9 @@ class Interface:
             print("Debe cargar un tablero primero con el comando 'cargar nombre_archivo'.")
             return
 
+        clear_screen()
         free_flow(self.input_board)
-        print("Resultado exitoso. Ha ganado el juego")
+        print("Muchas gracias por jugar, vuelva pronto!")
 
     def print_general_help(self):
         commands = [
