@@ -114,7 +114,6 @@ class Interface:
                     success = heuristic_solution(graph)
                     if not success:
                         print("No se encontró solución conectando todos los pares.")
-                    # Si success=True, la función ya imprimió el resultado final.
 
                 else:
                     print("Modo desconocido. Use 'bruta' o 'heuristica' (sin acentos).")
